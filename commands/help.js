@@ -6,15 +6,15 @@ a command, it is not shown to them. If a command name is given with the
 help command, its extended help is shown.
 */
 const { codeBlock } = require("@discordjs/builders");
-const { toProperCase } = require("../modules/functions.js");
+const { getGuildDB, toProperCase } = require("../modules/functions.js");
 
-exports.run = (client, message, args, level) => {
+exports.run = async(client, message, args, level) => {
   // Grab the container from the client to reduce line length.
   const { container } = client;
   // If no specific command is called, show all filtered commands.
   if (!args[0]) {
     // Load guild settings (for prefixes and eventually per-guild tweaks)
-    const settings = message.settings;
+    const settings = await getGuildDB(message.guild) ? await getGuildDB(message.guild) : await defaultDB(message.guild);
       
     // Filter all commands by which are available for the user's level, using the <Collection>.filter() method.
     const myCommands = message.guild ? container.commands.filter(cmd => container.levelCache[cmd.conf.permLevel] <= level) :

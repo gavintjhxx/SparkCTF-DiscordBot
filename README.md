@@ -1,8 +1,15 @@
-# Guide Bot
+# Discord.js Bot Template
 
 A boilerplate of a Discord.js Bot Handler.
-Updated and Maintained by the [Idiot's Guide Community](https://discord.gg/vXVxsAjSMF).
+Forked from, Updated and Maintained by the [Idiot's Guide Community](https://discord.gg/vXVxsAjSMF).
 
+# Stack
+* git
+* node (v16.x) 
+* Discord.js (Constantly updated to stable)
+* MongoDB (This repository uses mongoose)
+
+# Guidebot
 Guidebot is an attempt to show the basics of command and event handling, in clear, concise,
 and commented code. Guidebot can be used as the template for any type of bot, and contains
 most of the basic features you would need:

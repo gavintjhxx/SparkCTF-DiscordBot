@@ -1,5 +1,5 @@
 const logger = require("../modules/Logger.js");
-const { getSettings, permlevel } = require("../modules/functions.js");
+const { getGuildDB, permlevel, defaultDB } = require("../modules/functions.js");
 const config = require("../config.js");
 
 // The MESSAGE event runs anytime a message is received
@@ -13,9 +13,9 @@ module.exports = async (client, message) => {
   // and not get into a spam loop (we call that "botception").
   if (message.author.bot) return;
 
-  // Grab the settings for this server from Enmap.
-  // If there is no guild, get default conf (DMs)
-  const settings = message.settings = getSettings(message.guild);
+  // Grab the settings for this server from mongoose.
+  // If there is no guild, get default conf (DMs) and create guild document
+  const settings = await getGuildDB(message.guild) ? await getGuildDB(message.guild) : await defaultDB(message.guild);
 
   // Checks if the bot was mentioned via regex, with no message after it,
   // returns the prefix. The reason why we used regex here instead of
@@ -59,16 +59,6 @@ module.exports = async (client, message) => {
     return message.channel.send("This command is unavailable via private message. Please run this command in a guild.");
 
   if (!cmd.conf.enabled) return;
-
-  if (level < container.levelCache[cmd.conf.permLevel]) {
-    if (settings.systemNotice === "true") {
-      return message.channel.send(`You do not have permission to use this command.
-Your permission level is ${level} (${config.permLevels.find(l => l.level === level).name})
-This command requires level ${container.levelCache[cmd.conf.permLevel]} (${cmd.conf.permLevel})`);
-    } else {
-      return;
-    }
-  }
 
   // To simplify message arguments, the author's level is now put on level (not member so it is supported in DMs)
   // The "level" command module argument will be deprecated in the future.

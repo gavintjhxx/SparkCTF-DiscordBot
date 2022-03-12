@@ -1,14 +1,10 @@
 const logger = require("../modules/Logger.js");
-const { getSettings, permlevel } = require("../modules/functions.js");
+const { getGuildDB, permlevel } = require("../modules/functions.js");
 const config = require("../config.js");
 
 module.exports = async (client, interaction) => {
   // If it's not a command, stop.
   if (!interaction.isCommand()) return;
-
-  // Grab the settings for this server from Enmap.
-  // If there is no guild, get default conf (DMs)
-  const settings = interaction.settings = getSettings(interaction.guild);
 
   // Get the user or member's permission level from the elevation
   const level = permlevel(interaction);
@@ -29,7 +25,7 @@ module.exports = async (client, interaction) => {
       // This will basically set the ephemeral response to either announce
       // to everyone, or just the command executioner. But we **HAVE** to 
       // respond.
-      ephemeral: settings.systemNotice !== "true"
+      ephemeral: true
     });
   }
 
