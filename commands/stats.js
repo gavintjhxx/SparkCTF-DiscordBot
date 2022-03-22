@@ -15,8 +15,8 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 
   const stats = codeBlock("asciidoc", `= STATISTICS =
   • CPU Usage (%)  :: ${cpu.count()} cores | ${cpuUsage}%
-  • Mem Usage      :: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB
-  • Bot Mem Usage  :: ${usedMemMb}MB (${100 - freeMemPercentage}) / ${totalMemMb}MB (100%) | ${freeMemMb}MB (${freeMemPercentage}) free
+  • Mem Usage      :: ${usedMemMb}MB (${Math.round((100 - freeMemPercentage) * 100) / 100}%) / ${totalMemMb}MB (100%) | ${freeMemMb}MB (${freeMemPercentage}%) free
+  • BotMem Usage   :: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB
   • SSD Usage      :: ${usedGb}GB (${usedPercentage}%) / ${totalGb}GB (100%) | ${freeGb}GB (${freePercentage}) free
   • Uptime         :: ${duration}
   • Users          :: ${client.guilds.cache.map(g => g.memberCount).reduce((a, b) => a + b).toLocaleString()}
