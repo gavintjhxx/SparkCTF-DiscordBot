@@ -1,6 +1,7 @@
 const logger = require("./Logger.js");
 const config = require("../config.js");
 const guildSettings = require("../models/guildSettings");
+const { MessageEmbed } = require("discord.js");
 // Let's start by getting some useful functions that we'll use throughout
 // the bot, like logs and elevation features.
 
@@ -14,19 +15,19 @@ const guildSettings = require("../models/guildSettings");
 
   */
 function permlevel(message) {
-    let permlvl = 0;
+	let permlvl = 0;
 
-    const permOrder = config.permLevels.slice(0).sort((p, c) => p.level < c.level ? 1 : -1);
+	const permOrder = config.permLevels.slice(0).sort((p, c) => p.level < c.level ? 1 : -1);
 
-    while (permOrder.length) {
-        const currentLevel = permOrder.shift();
-        if (message.guild && currentLevel.guildOnly) continue;
-        if (currentLevel.check(message)) {
-            permlvl = currentLevel.level;
-            break;
-        }
-    }
-    return permlvl;
+	while (permOrder.length) {
+		const currentLevel = permOrder.shift();
+		if (message.guild && currentLevel.guildOnly) continue;
+		if (currentLevel.check(message)) {
+			permlvl = currentLevel.level;
+			break;
+		}
+	}
+	return permlvl;
 }
 
 /*
@@ -36,7 +37,7 @@ function permlevel(message) {
 
 */
 async function getGuildDB(guild) {
-    let guildDB = await guildSettings.findOne({ guildID: guild.id });
+	const guildDB = await guildSettings.findOne({ guildID: guild.id });
 	return guildDB;
 }
 
@@ -49,16 +50,95 @@ async function getGuildDB(guild) {
 
 */
 async function defaultDB(guild) {
-    let newGuildDB = new guildSettings({
+	const prefix = config["defaultSettings"]["prefix"];
+	logger.debug("Prefix:" + prefix);
+	const newGuildDB = new guildSettings({
 		guildID: guild.id,
-    	prefix: config.prefix
+		prefix: config["defaultSettings"]["prefix"]
 	});
 	await newGuildDB.save();
 
 	return { 
 		guildID: String,
 		prefix: String 
-	}
+	};
+}
+
+/*
+  GET USER FROM PARAM
+
+  FIND user from message through
+  - mentions
+  - id
+  - name
+
+*/
+function getUser(client, param) {
+	const mentionResolver = param.replace("<@", "").replace(">", "");
+	logger.debug("Mention Resolved: " + mentionResolver);
+	const userResolver = client.users.cache.get(mentionResolver) || client.users.cache.find(user => user.username === param);
+	return userResolver;
+}
+
+/*
+  GET CHANNEL FROM PARAM
+
+  FIND channel from message through
+  - mentions
+  - id
+  - name
+
+*/
+function getChannel(client, param) {
+	const mentionResolver = param.replace("<#", "").replace(">", "");
+	const channelResolver = client.channels.cache.get(mentionResolver) || client.channels.cache.find(user => user.username === param);
+	return channelResolver;
+}
+
+/*
+  PROMPT SUCCESS EMBED
+
+  SEND a response in embed upon successful result
+
+*/
+async function promptSuccessEmbed(msg, content) {
+	const successColor = "#8ef9a5";
+	const successEmbed = new MessageEmbed()
+		.setColor(successColor)
+		.setTitle("✅ Success!")
+		.setDescription(content);
+	msg.channel.send({ embeds: [ successEmbed ]});
+}
+
+/*
+  PROMPT FAILURE EMBED
+
+  SEND a response in embed upon failed result
+
+*/
+async function promptFailureEmbed(msg, content) {
+	const failColor = "#ff4d00";
+	const failureEmbed = new MessageEmbed()
+		.setColor(failColor)
+		.setTitle("❌ Woops, something went wrong.")
+		.setDescription(content);
+	msg.channel.send({ embeds: [ failureEmbed ]});
+}
+
+// 
+/*
+  PROMPT ALERT EMBED
+
+  SEND a response in embed upon invalid parameters
+
+*/
+async function promptAlertEmbed(msg, content) {
+	const alertColor = "#FFA700";
+	const alertEmbed = new MessageEmbed()
+		.setColor(alertColor)
+		.setTitle("⚠️ Yikes, invalid Usage!")
+		.setDescription(content);
+	msg.channel.send({ embeds: [ alertEmbed ]});
 }
 
 /*
@@ -74,14 +154,14 @@ async function defaultDB(guild) {
 
 */
 async function awaitReply(msg, question, limit = 60000) {
-    const filter = m => m.author.id === msg.author.id;
-    await msg.channel.send(question);
-    try {
-        const collected = await msg.channel.awaitMessages({ filter, max: 1, time: limit, errors: ["time"] });
-        return collected.first().content;
-    } catch (e) {
-        return false;
-    }
+	const filter = m => m.author.id === msg.author.id;
+	await msg.channel.send(question);
+	try {
+		const collected = await msg.channel.awaitMessages({ filter, max: 1, time: limit, errors: ["time"] });
+		return collected.first().content;
+	} catch (e) {
+		return false;
+	}
 }
 
 
@@ -90,22 +170,22 @@ async function awaitReply(msg, question, limit = 60000) {
 // toProperCase(String) returns a proper-cased string such as: 
 // toProperCase("Mary had a little lamb") returns "Mary Had A Little Lamb"
 function toProperCase(string) {
-    return string.replace(/([^\W_]+[^\s-]*) */g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+	return string.replace(/([^\W_]+[^\s-]*) */g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 }
 
 // These 2 process methods will catch exceptions and give *more details* about the error and stack trace.
 process.on("uncaughtException", (err) => {
-    const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
-    logger.error(`Uncaught Exception: ${errorMsg}`);
-    console.error(err);
-    // Always best practice to let the code crash on uncaught exceptions. 
-    // Because you should be catching them anyway.
-    process.exit(1);
+	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
+	logger.error(`Uncaught Exception: ${errorMsg}`);
+	console.error(err);
+	// Always best practice to let the code crash on uncaught exceptions. 
+	// Because you should be catching them anyway.
+	process.exit(1);
 });
 
 process.on("unhandledRejection", err => {
-    logger.error(`Unhandled rejection: ${err}`);
-    console.error(err);
+	logger.error(`Unhandled rejection: ${err}`);
+	console.error(err);
 });
 
-module.exports = { getGuildDB, defaultDB, permlevel, awaitReply, toProperCase };
+module.exports = { getGuildDB, getUser, getChannel, defaultDB, promptSuccessEmbed, promptFailureEmbed, promptAlertEmbed, permlevel, awaitReply, toProperCase };
