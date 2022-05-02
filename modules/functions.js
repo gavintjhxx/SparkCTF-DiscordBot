@@ -3,10 +3,6 @@ const config = require("../config.js");
 const guildSettings = require("../models/guildSettings");
 
 const { MessageEmbed } = require("discord.js");
-const transform = require("lodash.transform");
-const isEqual = require("lodash.isequal");
-const isArray = require("lodash.isarray");
-const isObject = require("lodash.isobject");
 // Let's start by getting some useful functions that we'll use throughout
 // the bot, like logs and elevation features.
 
@@ -224,21 +220,6 @@ function toProperCase(string) {
 	return string.replace(/([^\W_]+[^\s-]*) */g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 }
 
-function compareObjects(a, b) {
-
-	function changes(newObj, origObj) {
-		let arrayIndexCounter = 0;
-		return transform(newObj, function(result, value, key) {
-			if (!isEqual(value, origObj[key])) {
-				const resultKey = isArray(origObj) ? arrayIndexCounter++ : key;
-				result[resultKey] = (isObject(value) && isObject(origObj[key])) ? changes(value, origObj[key]) : value;
-			}
-		});
-	}
-	return changes(a, b);
-
-}
-
 // These 2 process methods will catch exceptions and give *more details* about the error and stack trace.
 process.on("uncaughtException", (err) => {
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
@@ -267,6 +248,5 @@ module.exports = {
 	promptAlertEmbedOnSlash,
 	permlevel, 
 	awaitReply, 
-	toProperCase, 
-	compareObjects 
+	toProperCase
 };
