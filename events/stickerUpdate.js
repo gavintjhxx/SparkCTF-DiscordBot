@@ -1,6 +1,5 @@
 const { MessageEmbed } = require("discord.js");
 const guildSettings = require("../models/guildSettings");
-const { compareObjects } = require("../modules/functions");
 
 module.exports = async (client, oldSticker, newSticker) => {
 	const guildID = newSticker.guild.id;
@@ -19,12 +18,13 @@ module.exports = async (client, oldSticker, newSticker) => {
 	firstLog ? { executor } = firstLog : executor = "(Unknown)";
 
 	// Get changes in emoji objects
-	const changes = compareObjects(oldSticker, newSticker);
-	// console.log(changes);
+	const changes = [];
+	if (oldSticker.name !== newSticker.name) changes.push(`**Name:** \`${oldSticker.name}\` to \`${newSticker.name}\``);
+
 	const logEmbed = new MessageEmbed()
 		.setColor("#FFA700")
 		.setTitle("Sticker Updated")
-		.setDescription(`**Executor:** ${executor.tag} (${executor.id})\n**Emoji:** ${newSticker.name} (${newSticker.id})\n**Before:** \`\`\`js\n${changes}\`\`\``)
+		.setDescription(`**Executor:** ${executor.tag} (${executor.id})\n**Emoji:** ${newSticker.name} (${newSticker.id})\n\n**__Changes:__**\n${changes.join("\n")}`)
 		.setThumbnail(newSticker.url)
 		.setTimestamp();
 	client.channels.cache.get(logChannelID).send({ embeds: [ logEmbed ]});

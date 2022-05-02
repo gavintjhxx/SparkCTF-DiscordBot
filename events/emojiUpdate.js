@@ -1,6 +1,5 @@
 const { MessageEmbed } = require("discord.js");
 const guildSettings = require("../models/guildSettings");
-const { compareObjects } = require("../modules/functions");
 
 module.exports = async (client, oldEmoji, newEmoji) => {
 	const guildID = newEmoji.guild.id;
@@ -19,12 +18,14 @@ module.exports = async (client, oldEmoji, newEmoji) => {
 	firstLog ? { executor } = firstLog : executor = "(Unknown)";
 
 	// Get changes in emoji objects
-	const changes = compareObjects(oldEmoji, newEmoji);
+	const changes = [];
+	if (oldEmoji.name !== newEmoji.name) changes.push(`**Name:** \`${oldEmoji.name}\` to \`${newEmoji.name}\``);
+
 	// console.log(changes);
 	const logEmbed = new MessageEmbed()
 		.setColor("#FFA700")
 		.setTitle("Emoji Updated")
-		.setDescription(`**Executor:** ${executor.tag} (${executor.id})\n**Emoji:** ${newEmoji.name} (${newEmoji.id})\n**Before:** \`\`\`js\n${changes}\`\`\``)
+		.setDescription(`**Executor:** ${executor.tag} (${executor.id})\n**Emoji:** ${newEmoji.name} (${newEmoji.id})\n\n**__Changes:__**\n${changes.join("\n")}`)
 		.setThumbnail(newEmoji.url)
 		.setTimestamp();
 	client.channels.cache.get(logChannelID).send({ embeds: [ logEmbed ]});
