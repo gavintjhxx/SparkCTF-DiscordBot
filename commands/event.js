@@ -64,8 +64,8 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 		events.forEach((e) => {
 			let eventEnabled;
 			let eventLogChannel;
-			(settings.logs[`${e.event}`].enabled == true) ? (eventEnabled = "Enabled") : (eventEnabled = "Disabled");
-			(settings.logs[`${e.event}`].logChannelID) ? (eventLogChannel = `<#${settings.logs[e.event].logChannelID}>`) : (eventLogChannel = "Not set");
+			settings.logs[`${e.event}`].enabled ? ((settings.logs[`${e.event}`].enabled == true) ? (eventEnabled = "Enabled") : (eventEnabled = "Disabled")) : eventEnabled = "Unconfigured";
+			(settings.logs[`${e.event}`].logChannelID) ? (eventLogChannel = `<#${settings.logs[e.event].logChannelID}>`) : (eventLogChannel = "Unconfigured");
 			e.enabled = eventEnabled;
 			e.eventLogChannel = eventLogChannel;
 		});
