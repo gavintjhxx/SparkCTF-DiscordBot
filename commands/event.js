@@ -60,11 +60,22 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 	);
 
 	if (commandType == "list") { // List events command
+
+		events.forEach((e) => {
+			let eventEnabled;
+			let eventLogChannel;
+			(settings.logs[`${e.event}`].enabled == true) ? (eventEnabled = "Enabled") : (eventEnabled = "Disabled");
+			(settings.logs[`${e.event}`].logChannelID) ? (eventLogChannel = `<#${settings.logs[e.event].logChannelID}>`) : (eventLogChannel = "Not set");
+			e.enabled = eventEnabled;
+			e.eventLogChannel = eventLogChannel;
+		});
+
 		const eventsListEmbed = new MessageEmbed()
 			.setColor("#FFA700")
 			.setTitle("Events List")
-			.setDescription(events.map(e => `**${e.event}** (\`${e.value}\`):\n${e.desc}`).join("\n"));
+			.setDescription(events.map(e => `**${e.event}** (\`${e.value}\`) - \`${e.enabled}\` in ${e.eventLogChannel}\n${e.desc}`).join("\n"));
 		return message.channel.send({ embeds: [ eventsListEmbed ]});
+
 	} else if (commandType == "enable") { // Enable log event command
 
 		const eventValue = args[1];
