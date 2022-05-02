@@ -1,10 +1,8 @@
 const { MessageEmbed } = require("discord.js");
 const guildSettings = require("../models/guildSettings");
-const logger = require("../modules/Logger");
 
 module.exports = async (client, emoji) => {
 
-	logger.debug("Event file reached");
 	const guildID = emoji.guild.id;
 	const settings = await guildSettings.findOne({ guildID: guildID });
 	const logEnabled = settings.logs.EMOJI_CREATE.enabled;
