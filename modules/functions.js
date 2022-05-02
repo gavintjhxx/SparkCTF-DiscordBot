@@ -147,6 +147,52 @@ async function promptAlertEmbed(msg, content) {
 }
 
 /*
+  PROMPT SUCCESS EMBED
+
+  SEND a response in embed upon successful result
+
+*/
+async function promptSuccessEmbedOnSlash(interaction, content) {
+	const successColor = "#8ef9a5";
+	const successEmbed = new MessageEmbed()
+		.setColor(successColor)
+		.setTitle("✅ Success!")
+		.setDescription(content);
+	interaction.reply({ embeds: [ successEmbed ]});
+}
+
+/*
+  PROMPT FAILURE EMBED
+
+  SEND a response in embed upon failed result
+
+*/
+async function promptFailureEmbedOnSlash(interaction, content) {
+	const failColor = "#ff4d00";
+	const failureEmbed = new MessageEmbed()
+		.setColor(failColor)
+		.setTitle("❌ Woops, something went wrong.")
+		.setDescription(content);
+	interaction.reply({ embeds: [ failureEmbed ]});
+}
+
+// 
+/*
+  PROMPT ALERT EMBED
+
+  SEND a response in embed upon invalid parameters
+
+*/
+async function promptAlertEmbedOnSlash(interaction, content) {
+	const alertColor = "#FFA700";
+	const alertEmbed = new MessageEmbed()
+		.setColor(alertColor)
+		.setTitle("⚠️ Yikes, invalid Usage!")
+		.setDescription(content);
+	interaction.reply({ embeds: [ alertEmbed ]});
+}
+
+/*
   SINGLE-LINE AWAIT MESSAGE
 
   A simple way to grab a single reply, from the user that initiated
@@ -208,4 +254,19 @@ process.on("unhandledRejection", err => {
 	console.error(err);
 });
 
-module.exports = { getGuildDB, getUser, getChannel, defaultDB, promptSuccessEmbed, promptFailureEmbed, promptAlertEmbed, permlevel, awaitReply, toProperCase, compareObjects };
+module.exports = { 
+	getGuildDB, 
+	getUser, 
+	getChannel, 
+	defaultDB, 
+	promptSuccessEmbed, 
+	promptFailureEmbed, 
+	promptAlertEmbed, 
+	promptSuccessEmbedOnSlash,
+	promptFailureEmbedOnSlash,
+	promptAlertEmbedOnSlash,
+	permlevel, 
+	awaitReply, 
+	toProperCase, 
+	compareObjects 
+};
