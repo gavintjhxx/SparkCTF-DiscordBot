@@ -24,7 +24,6 @@ module.exports = async (client, guildBan) => {
 		.setColor("#FFA700")
 		.setTitle("Member Banned")
 		.setDescription(`**Executor:** ${executor.tag} (${executor.id})\n**User:** ${user}\n**Reason:** ${reason}`)
-		.setThumbnail(guildBan.guild.url)
 		.setTimestamp();
 	client.channels.cache.get(logChannelID).send({ embeds: [ logEmbed ]});
     

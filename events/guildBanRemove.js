@@ -24,7 +24,6 @@ module.exports = async (client, guildUnban) => {
 		.setColor("#FFA700")
 		.setTitle("Member Unbanned")
 		.setDescription(`**Executor:** ${executor.tag} (${executor.id})\n**User:** ${user}\n**Reason:** ${reason}`)
-		.setThumbnail(guildUnban.guild.url)
 		.setTimestamp();
 	client.channels.cache.get(logChannelID).send({ embeds: [ logEmbed ]});
     
