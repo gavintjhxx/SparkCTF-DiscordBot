@@ -27,6 +27,7 @@ const config = {
 		Intents.FLAGS.GUILD_INVITES,
 		Intents.FLAGS.GUILD_MESSAGES,
 		Intents.FLAGS.GUILD_MEMBERS,
+		Intents.FLAGS.GUILD_VOICE_STATES,
 	],
 	// Partials your bot may need should go here, CHANNEL is required for DM's
 	partials: ["CHANNEL"],
