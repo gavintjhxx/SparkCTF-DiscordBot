@@ -22,7 +22,7 @@ module.exports = async (client, guildMember) => {
 	
 	const logEmbed = new MessageEmbed()
 		.setColor("#FFA700")
-		.setTitle("Member Banned")
+		.setTitle("User Joined")
 		.setDescription(`**Executor:** ${executor.tag} (${executor.id})\n**User:** ${user}\n**Account Created At:** ${createdAt}`)
 		.setThumbnail(guildMember.user.avatarURL())
 		.setTimestamp();
