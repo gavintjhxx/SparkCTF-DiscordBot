@@ -4,7 +4,7 @@ const { codeBlock } = require("@discordjs/builders");
 const { DurationFormatter } = require("@sapphire/time-utilities");
 const durationFormatter = new DurationFormatter();
 
-exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
+exports.run = async (client, interaction) => { // eslint-disable-line no-unused-vars
 	const duration = durationFormatter.format(client.uptime);
 	const cpu = osu.cpu;
 	const mem = osu.mem;
@@ -24,19 +24,19 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
   • Channels       :: ${client.channels.cache.size.toLocaleString()}
   • Discord.js     :: v${version}
   • Node           :: ${process.version}`);
-	message.channel.send(stats);
+	await interaction.reply(stats);
 };
 
-exports.conf = {
-	enabled: true,
-	guildOnly: false,
-	aliases: [],
-	permLevel: "User"
-};
-
-exports.help = {
+exports.commandData = {
 	name: "stats",
-	category: "Miscellaneous",
-	description: "Gives some useful bot statistics.",
-	usage: "stats"
+	description: "Show's the bots stats.",
+	options: [],
+	defaultPermission: true,
+};
+
+// Set guildOnly to true if you want it to be available on guilds only.
+// Otherwise false is global.
+exports.conf = {
+	permLevel: "User",
+	guildOnly: false
 };
