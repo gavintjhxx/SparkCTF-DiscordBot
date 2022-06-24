@@ -26,8 +26,8 @@ const slashcmds = new Collection();
 // Generate a cache of client permissions for pretty perm names in commands.
 const levelCache = {};
 for (let i = 0; i < permLevels.length; i++) {
-  const thisLevel = permLevels[i];
-  levelCache[thisLevel.name] = thisLevel.level;
+    const thisLevel = permLevels[i];
+    levelCache[thisLevel.name] = thisLevel.level;
 }
 
 // To reduce client pollution we'll create a single container property
@@ -52,19 +52,8 @@ const init = async () => {
         logger.log(`Loading Command: ${props.help.name}. 👌`, "log");
         client.container.commands.set(props.help.name, props);
         props.conf.aliases.forEach(alias => {
-          client.container.aliases.set(alias, props.help.name);
+            client.container.aliases.set(alias, props.help.name);
         });
-    }
-
-    // Now we load any **slash** commands you may have in the ./slash directory.
-    const slashFiles = readdirSync("./slash").filter(file => file.endsWith(".js"));
-    for (const file of slashFiles) {
-        const command = require(`./slash/${file}`);
-        const commandName = file.split(".")[0];
-        logger.log(`Loading Slash command: ${commandName}. 👌`, "log");
-        
-        // Now set the name of the command with it's properties.
-        client.container.slashcmds.set(command.commandData.name, command);
     }
 
     // Then we load events, which will include our message and ready event.
@@ -84,10 +73,10 @@ const init = async () => {
 
     //Database
     mongoose.connect(`${process.env.DATABASE_CONNECTION_URI}`, { useNewUrlParser: true, useUnifiedTopology: true });
-    let db = mongoose.connection;
-    db.on('error', () => logger.log("Database failed to connect.", "error"));
-    db.once('open', function () {
-        logger.log("Database connected. 👌", "database")
+    const db = mongoose.connection;
+    db.on("error", () => logger.log("Database failed to connect.", "error"));
+    db.once("open", function() {
+        logger.log("Database connected. 👌", "database");
     });
 
 // End top-level async/await function.

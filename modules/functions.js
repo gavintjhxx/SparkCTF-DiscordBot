@@ -36,8 +36,8 @@ function permlevel(message) {
 
 */
 async function getGuildDB(guild) {
-    let guildDB = await guildSettings.findOne({ guildID: guild.id });
-	return guildDB;
+    const guildDB = await guildSettings.findOne({ guildID: guild.id });
+    return guildDB;
 }
 
 /*
@@ -49,16 +49,16 @@ async function getGuildDB(guild) {
 
 */
 async function defaultDB(guild) {
-    let newGuildDB = new guildSettings({
-		guildID: guild.id,
-    	prefix: config.prefix
-	});
-	await newGuildDB.save();
+    const newGuildDB = new guildSettings({
+        guildID: guild.id,
+        prefix: config.prefix
+    });
+    await newGuildDB.save();
 
-	return { 
-		guildID: String,
-		prefix: String 
-	}
+    return { 
+        guildID: String,
+        prefix: String 
+    };
 }
 
 /*
