@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const guildSettingsSchema = mongoose.Schema({
 	guildID: String,
 	prefix: String,
+	modRoles: {
+		moderatorRole: String,
+		administratorRole: String
+	},
 	logs: {
 		EMOJI_CREATE: {
 			enabled: Boolean,
