@@ -60,6 +60,7 @@ const guildSettingsSchema = mongoose.Schema({
 			enabled: Boolean,
 			logChannelID: String
 		},
+		// TODO: Add the following events
 		ROLE_CREATE: {
 			enabled: Boolean,
 			logChannelID: String
