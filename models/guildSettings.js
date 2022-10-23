@@ -4,8 +4,8 @@ const guildSettingsSchema = mongoose.Schema({
 	guildID: String,
 	prefix: String,
 	modRoles: {
-		moderatorRole: String,
-		administratorRole: String
+		moderatorRole: [{ roleID: String }],
+		administratorRole: [{ roleID: String }]
 	},
 	logs: {
 		EMOJI_CREATE: {
