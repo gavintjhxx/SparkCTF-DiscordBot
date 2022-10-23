@@ -5,16 +5,16 @@ command is also filtered by level, so if a user does not have access to
 a command, it is not shown to them. If a command name is given with the
 help command, its extended help is shown.
 */
-const { codeBlock } = require("@discordjs/builders");
+const { MessageEmbed } = require("discord.js");
 const { getGuildDB, toProperCase, defaultDB } = require("../modules/functions.js");
 
 exports.run = async (client, message, args, level) => {
 	// Grab the container from the client to reduce line length.
 	const { container } = client;
+	// Load guild settings (for prefixes and eventually per-guild tweaks)
+	const settings = await getGuildDB(message.guild) ? await getGuildDB(message.guild) : await defaultDB(message.guild);
 	// If no specific command is called, show all filtered commands.
 	if (!args[0]) {
-		// Load guild settings (for prefixes and eventually per-guild tweaks)
-		const settings = await getGuildDB(message.guild) ? await getGuildDB(message.guild) : await defaultDB(message.guild);
       
 		// Filter all commands by which are available for the user's level, using the <Collection>.filter() method.
 		const myCommands = message.guild ? container.commands.filter(cmd => container.levelCache[cmd.conf.permLevel] <= level) :
@@ -30,19 +30,27 @@ exports.run = async (client, message, args, level) => {
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
 		let currentCategory = "";
-		let output = `= Command List =\n[Use ${settings.prefix}help <commandname> for details]\n`;
+		let output = "";
 		const sorted = enabledCommands.sort((p, c) => p.help.category > c.help.category ? 1 : 
 			p.help.name > c.help.name && p.help.category === c.help.category ? 1 : -1 );
 
 		sorted.forEach( c => {
 			const cat = toProperCase(c.help.category);
 			if (currentCategory !== cat) {
-				output += `\u200b\n== ${cat} ==\n`;
+				output += `**__${cat}__**\n`;
 				currentCategory = cat;
 			}
-			output += `${settings.prefix}${c.help.name}${" ".repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
+			output += `\`${settings.prefix}${c.help.name}\`${" ".repeat(longest - c.help.name.length)} - ${c.help.description}\n`;
 		});
-		message.channel.send(codeBlock("asciidoc", output));
+
+		const helpEmbed = new MessageEmbed()
+			.setColor("#FFA700")
+			.setTitle("Commands")
+			.setDescription(output)
+			.setTimestamp()
+			.setFooter(`[Use ${settings.prefix}help <commandname> for details]`);
+
+		message.channel.send({ embeds: [ helpEmbed ] });
 
 	} else {
 		// Show individual command's help.
@@ -50,7 +58,14 @@ exports.run = async (client, message, args, level) => {
 		if (container.commands.has(command) || container.commands.has(container.aliases.get(command))) {
 			command = container.commands.get(command) ?? container.commands.get(container.aliases.get(command));
 			if (level < container.levelCache[command.conf.permLevel]) return;
-			message.channel.send(codeBlock("asciidoc", `= ${command.help.name} = \n${command.help.description}\nusage:: ${command.help.usage}\naliases:: ${command.conf.aliases.join(", ")}`));
+			let aliases = command.conf.aliases;
+			aliases.length < 1 ? aliases = "None" : aliases = aliases.join(", ");
+			const commandHelpEmbed = new MessageEmbed()
+				.setColor("#FFA700")
+				.setTitle("Command Help")
+				.setDescription(`\`${settings.prefix}${command.help.name}\` - ${command.help.description}\n**Usage:** ${command.help.usage}\n**Aliases:** ${aliases}`)
+				.setTimestamp();
+			message.channel.send({ embeds: [ commandHelpEmbed ] });
 		} else return message.channel.send("No command with that name, or alias exists.");
 	}};
 
