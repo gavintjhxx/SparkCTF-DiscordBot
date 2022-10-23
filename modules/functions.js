@@ -92,8 +92,23 @@ function getUser(client, param) {
 */
 function getChannel(client, param) {
 	const mentionResolver = param.replace("<#", "").replace(">", "");
-	const channelResolver = client.channels.cache.get(mentionResolver) || client.channels.cache.find(user => user.username === param);
+	const channelResolver = client.channels.cache.get(mentionResolver) || client.channels.cache.find(c => c.name === param);
 	return channelResolver;
+}
+
+/*
+  GET ROLE FROM PARAM
+
+  FIND role from message through
+  - mentions
+  - id
+  - name
+
+*/
+function getRole(guild, param) {
+	const mentionResolver = param.replace("<@&", "").replace(">", "");
+	const roleResolver = guild.roles.cache.get(mentionResolver) || guild.roles.cache.find(r => r.name === param);
+	return roleResolver;
 }
 
 /*
@@ -239,6 +254,7 @@ module.exports = {
 	getGuildDB, 
 	getUser, 
 	getChannel, 
+	getRole,
 	defaultDB, 
 	promptSuccessEmbed, 
 	promptFailureEmbed, 
