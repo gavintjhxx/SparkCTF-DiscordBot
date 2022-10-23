@@ -7,31 +7,6 @@ const { MessageEmbed } = require("discord.js");
 // the bot, like logs and elevation features.
 
 /*
-  PERMISSION LEVEL FUNCTION
-
-  This is a very basic permission system for commands which uses "levels"
-  "spaces" are intentionally left black so you can add them if you want.
-  NEVER GIVE ANYONE BUT OWNER THE LEVEL 10! By default this can run any
-  command including the VERY DANGEROUS `eval` and `exec` commands!
-
-  */
-function permlevel(message) {
-	let permlvl = 0;
-
-	const permOrder = config.permLevels.slice(0).sort((p, c) => p.level < c.level ? 1 : -1);
-
-	while (permOrder.length) {
-		const currentLevel = permOrder.shift();
-		if (message.guild && currentLevel.guildOnly) continue;
-		if (currentLevel.check(message)) {
-			permlvl = currentLevel.level;
-			break;
-		}
-	}
-	return permlvl;
-}
-
-/*
   GUILD SETTINGS FUNCTION
 
   FIND guild's settings model in database
@@ -63,6 +38,31 @@ async function defaultDB(guild) {
 		guildID: String,
 		prefix: String 
 	};
+}
+
+/*
+  PERMISSION LEVEL FUNCTION
+
+  This is a very basic permission system for commands which uses "levels"
+  "spaces" are intentionally left black so you can add them if you want.
+  NEVER GIVE ANYONE BUT OWNER THE LEVEL 10! By default this can run any
+  command including the VERY DANGEROUS `eval` and `exec` commands!
+
+  */
+async function permlevel(message) {
+	let permlvl = 0;
+
+	const permOrder = config.permLevels.slice(0).sort((p, c) => p.level < c.level ? 1 : -1);
+	const settings = await getGuildDB(message.guild) ? await getGuildDB(message.guild) : await defaultDB(message.guild);
+	while (permOrder.length) {
+		const currentLevel = permOrder.shift();
+		if (message.guild && currentLevel.guildOnly) continue;
+		if (currentLevel.check(message, settings)) {
+			permlvl = currentLevel.level;
+			break;
+		}
+	}
+	return permlvl;
 }
 
 /*

@@ -1,6 +1,4 @@
-const logger = require("../modules/Logger.js");
 const { getGuildDB, permlevel, defaultDB } = require("../modules/functions.js");
-const config = require("../config.js");
 
 // The MESSAGE event runs anytime a message is received
 // Note that due to the binding of client to every event, every event
@@ -44,7 +42,8 @@ module.exports = async (client, message) => {
 	if (message.guild && !message.member) await message.guild.members.fetch(message.author);
 
 	// Get the user or member's permission level from the elevation
-	const level = permlevel(message);
+	const level = await permlevel(message);
+	console.log(level);
 
 	// Check whether the command, or alias, exist in the collections defined
 	// in app.js.
@@ -71,7 +70,6 @@ module.exports = async (client, message) => {
 	// If the command exists, **AND** the user has permission, run it.
 	try {
 		await cmd.run(client, message, args, level);
-		logger.log(`${config.permLevels.find(l => l.level === level).name} ${message.author.id} ran command ${cmd.help.name}`, "cmd");
 	} catch (e) {
 		console.error(e);
 		message.channel.send({ content: `There was a problem with your request.\n\`\`\`${e.message}\`\`\`` })

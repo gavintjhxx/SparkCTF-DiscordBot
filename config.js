@@ -66,10 +66,11 @@ const config = {
             * If they do return true, which will allow them to execute the command in question.
             * If they don't then return false, which will prevent them from executing the command.
             */
-			check: (message) => {
+			check: (message, guildDB) => {
 				try {
-					const modRole = message.guild.roles.cache.find(r => r.name.toLowerCase() === message.settings.modRole.toLowerCase());
-					if (modRole && message.member.roles.cache.has(modRole.id)) return true;
+					const modRole = guildDB.modRoles.moderatorRole;
+					const memberHasRole = modRole?.some(role => message.member.roles.cache.has(role.roleID));
+					if (modRole && memberHasRole) return true;
 				} catch (e) {
 					return false;
 				}
@@ -78,10 +79,11 @@ const config = {
 
 		{ level: 3,
 			name: "Administrator", 
-			check: (message) => {
+			check: (message, guildDB) => {
 				try {
-					const adminRole = message.guild.roles.cache.find(r => r.name.toLowerCase() === message.settings.adminRole.toLowerCase());
-					return (adminRole && message.member.roles.cache.has(adminRole.id));
+					const adminRole = guildDB.modRoles.administratorRole;
+					const memberHasRole = adminRole?.some(role => message.member.roles.cache.has(role.roleID));
+					if (adminRole && memberHasRole) return true;
 				} catch (e) {
 					return false;
 				}
