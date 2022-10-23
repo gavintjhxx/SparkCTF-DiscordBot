@@ -200,5 +200,5 @@ exports.help = {
 	name: "event",
 	category: "Server Configuration",
 	description: "List and configure log events.",
-	usage: "event"
+	usage: "event [type] (param)"
 };

@@ -52,5 +52,5 @@ exports.help = {
 	name: "embed",
 	category: "Miscellaneous",
 	description: "Send an embed into a specified channel with the specified content.",
-	usage: "embed"
+	usage: "embed [channel] [hexColor] [title], [content]"
 };

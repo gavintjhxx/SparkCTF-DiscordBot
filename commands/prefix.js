@@ -56,5 +56,5 @@ exports.help = {
 	name: "prefix",
 	category: "Customization",
 	description: "Change bot prefix for current server.",
-	usage: "prefix"
+	usage: "prefix [newPrefix]"
 };

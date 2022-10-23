@@ -36,5 +36,5 @@ exports.help = {
 	name: "dream",
 	category: "Miscellaneous",
 	description: "Generates an image using AI from Wombo Dream.",
-	usage: "dream"
+	usage: "dream [prompt]"
 };
