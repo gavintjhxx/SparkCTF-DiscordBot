@@ -31,7 +31,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 				let lockdownMessage;
 				args[1] ? lockdownMessage = args.slice(1).join(" ") : lockdownMessage = "This lockdown was initiated by an administrator. Please wait for the lockdown to be lifted.";
 				const lockdownEmbed = new MessageEmbed()
-					.setColor()
+					.setColor("FA8072")
 					.setTitle("🔒 Lockdown Initiated")
 					.setDescription(lockdownMessage);
 
@@ -60,7 +60,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 				let lockdownMessage;
 				args[1] ? lockdownMessage = args.slice(1).join(" ") : lockdownMessage = "This lockdown was lifted by an administrator.";
 				const lockdownEmbed = new MessageEmbed()
-					.setColor()
+					.setColor("FA8072")
 					.setTitle("🔓 Lockdown Lifted")
 					.setDescription(lockdownMessage);
 
