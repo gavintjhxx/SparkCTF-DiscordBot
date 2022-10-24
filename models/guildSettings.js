@@ -7,6 +7,9 @@ const guildSettingsSchema = mongoose.Schema({
 		moderatorRole: [{ roleID: String }],
 		administratorRole: [{ roleID: String }]
 	},
+	lockdown: {
+		channels: [{ channelID: String }]
+	},
 	logs: {
 		EMOJI_CREATE: {
 			enabled: Boolean,
