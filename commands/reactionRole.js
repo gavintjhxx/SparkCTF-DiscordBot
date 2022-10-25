@@ -60,7 +60,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 		return promptSuccessEmbed(
 			message,
 			`Successfully created reaction role.\n\
-			Binded reaction \`${emojiSpecified.name}\` to role \`<@&${roleSpecified.id}>\` in [message](${messageLink})`
+			Binded reaction \`${emojiSpecified.name}\` to role <@&${roleSpecified.id}> in [message](${messageLink})`
 		);
 	} else {
 		// Reaction role exists
@@ -75,7 +75,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 		return promptSuccessEmbed(
 			message,
 			`Successfully deleted reaction role.\n\
-			Unbinded reaction \`${emojiSpecified.name}\` to role \`<@&${roleSpecified.id}>\` in [message](${messageLink})`
+			Unbinded reaction \`${emojiSpecified.name}\` to role <@&${roleSpecified.id}> in [message](${messageLink})`
 		);
 	}
 };
