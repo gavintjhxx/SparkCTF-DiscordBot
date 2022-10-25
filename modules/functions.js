@@ -112,6 +112,20 @@ function getRole(guild, param) {
 }
 
 /*
+  GET EMOJI FROM PARAM
+
+  FIND emoji from message through
+  - <:emojiName:emojiID>
+
+*/
+function getEmoji(guild, param) {
+	if (!param.includes(":")) return emojiResolver = { name: param };
+	const emojiName = param.replace("<", "").replace(">", "");
+	let emojiResolver = guild.emojis.cache.find(emoji => emoji.name === emojiName);
+	return emojiResolver;
+}
+
+/*
   PROMPT SUCCESS EMBED
 
   SEND a response in embed upon successful result
@@ -255,6 +269,7 @@ module.exports = {
 	getUser, 
 	getChannel, 
 	getRole,
+	getEmoji,
 	defaultDB, 
 	promptSuccessEmbed, 
 	promptFailureEmbed, 
