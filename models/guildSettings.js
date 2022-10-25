@@ -10,6 +10,9 @@ const guildSettingsSchema = mongoose.Schema({
 	lockdown: {
 		channels: [{ channelID: String }]
 	},
+	reactionRoles: {
+		roles: [{ messageID: String, roleID: String, emoji: String }]
+	},
 	logs: {
 		EMOJI_CREATE: {
 			enabled: Boolean,
