@@ -119,9 +119,9 @@ function getRole(guild, param) {
 
 */
 function getEmoji(guild, param) {
-	if (!param.includes(":")) return emojiResolver = { name: param };
+	if (!param.includes(":")) return { name: param };
 	const emojiName = param.replace("<", "").replace(">", "");
-	let emojiResolver = guild.emojis.cache.find(emoji => emoji.name === emojiName);
+	const emojiResolver = guild.emojis.cache.find(emoji => emoji.name === emojiName);
 	return emojiResolver;
 }
 
