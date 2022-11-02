@@ -54,7 +54,7 @@ exports.conf = {
 
 exports.help = {
 	name: "prefix",
-	category: "Customization",
+	category: "Server Configuration",
 	description: "Change bot prefix for current server.",
 	usage: "prefix [newPrefix]"
 };
