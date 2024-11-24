@@ -4,10 +4,10 @@ const { getGuildDB, defaultDB, promptFailureEmbed, promptSuccessEmbed } = requir
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
 	const settings = await getGuildDB(message.guild) ? await getGuildDB(message.guild) : await defaultDB(message.guild);
 	// command goes here
-	await promptSuccessEmbed(message, "***Pulling from master branch...***");
-	exec("git pull origin master", async (error, stdout) => {
+	await promptSuccessEmbed(message, "***Pulling from main branch...***");
+	exec("git pull origin main", async (error, stdout) => {
 		if (error) return promptFailureEmbed(message, "```js\n" + error + "```");
-		return promptSuccessEmbed(message, `***Pulled from master branch.***\n\`\`\`js\n${stdout}\`\`\`\nA restart of the bot is required to apply the changes. (\`${settings.prefix}reboot\`)`);
+		return promptSuccessEmbed(message, `***Pulled from main branch.***\n\`\`\`js\n${stdout}\`\`\`\nA restart of the bot is required to apply the changes. (\`${settings.prefix}reboot\`)`);
 	});
 };
 
