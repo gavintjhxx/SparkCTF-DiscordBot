@@ -5,13 +5,11 @@ const config = {
 	// Bot Admins, level 9 by default. Array of user ID strings.
 	"admins": [
 		"382368885267234816",
-		"363983542889349120"
 	],
 
 	// Bot Support, level 8 by default. Array of user ID strings
 	"support": [
 		"382368885267234816",
-		"363983542889349120"
 	],
 
 	/*
@@ -20,8 +18,8 @@ const config = {
     * For join messages to work you need Guild Members, which is privileged and requires extra setup.
     * For more info about intents see the README.
     */
-	intents: [ 
-		Intents.FLAGS.GUILDS, 
+	intents: [
+		Intents.FLAGS.GUILDS,
 		Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
 		Intents.FLAGS.GUILD_BANS,
 		Intents.FLAGS.GUILD_INVITES,
@@ -34,12 +32,12 @@ const config = {
 	partials: ["CHANNEL", "MESSAGE", "REACTION"],
 
 	/*
-    * Default per-server settings. These settings are entered in a database on first load, 
+    * Default per-server settings. These settings are entered in a database on first load,
     * And are then completely ignored from this file. To modify default settings, use the `conf` command.
     * DO NOT REMOVE THIS BEFORE YOUR BOT IS LOADED AND FUNCTIONAL.
     */
 	"defaultSettings" : {
-		"prefix": "~",
+		"prefix": ".",
 		"systemNotice": "false", // This gives a notice when a user tries to run a command that they do not have permission to use.
 		"commandReply": "false", // Toggle this if you want the bot to ping the command executor or not.
 	},
@@ -49,7 +47,7 @@ const config = {
 	permLevels: [
 		// This is the lowest permission level, this is for users without a role.
 		{ level: 0,
-			name: "User", 
+			name: "User",
 			/*
             * Don't bother checking, just return true which allows them to execute any command their
             * level allows them to.
@@ -79,7 +77,7 @@ const config = {
 		},
 
 		{ level: 3,
-			name: "Administrator", 
+			name: "Administrator",
 			check: (message, guildDB) => {
 				try {
 					const adminRole = guildDB.modRoles.administratorRole;
@@ -90,10 +88,10 @@ const config = {
 				}
 			}
 		},
-        
+
 		// This is the server owner.
 		{ level: 4,
-			name: "Server Owner", 
+			name: "Server Owner",
 			/*
             * Simple check, if the guild owner id matches the message author's ID, then it will return true.
             * Otherwise it will return false.
@@ -103,7 +101,7 @@ const config = {
 				return message.guild?.ownerId === serverOwner.id;
 			}
 		},
-        
+
 		/*
         * Bot Support is a special in between level that has the equivalent of server owner access
         * to any server they joins, in order to help troubleshoot the bot on behalf of owners.
@@ -126,7 +124,7 @@ const config = {
 				return config.admins.includes(botAdmin.id);
 			}
 		},
-        
+
 		/*
         * This is the bot owner, this should be the highest permission level available.
         * The reason this should be the highest level is because of dangerous commands such as eval
@@ -134,11 +132,11 @@ const config = {
         * Updated to utilize the Teams type from the Application, pulls a list of "Owners" from it.
         */
 		{ level: 10,
-			name: "Bot Owner", 
+			name: "Bot Owner",
 			// Another simple check, compares the message author id to a list of owners found in the bot application.
 			check: (message) => {
 				const owner = message.author ?? message.user;
-				return owner.id === process.env.OWNER;
+				return owner.id === process.env.OWNER_ID;
 			}
 		}
 	]

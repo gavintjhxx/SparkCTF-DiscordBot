@@ -34,9 +34,9 @@ async function defaultDB(guild) {
 	});
 	await newGuildDB.save();
 
-	return { 
+	return {
 		guildID: String,
-		prefix: String 
+		prefix: String
 	};
 }
 
@@ -155,7 +155,7 @@ async function promptFailureEmbed(msg, content) {
 	msg.channel.send({ embeds: [ failureEmbed ]});
 }
 
-// 
+//
 /*
   PROMPT ALERT EMBED
 
@@ -177,13 +177,14 @@ async function promptAlertEmbed(msg, content) {
   SEND a response in embed upon successful result
 
 */
-async function promptSuccessEmbedOnSlash(interaction, content) {
+async function promptSuccessEmbedOnSlash(interaction, content, ephemeral) {
+	ephemeral ? null : ephemeral == false;
 	const successColor = "#8ef9a5";
 	const successEmbed = new MessageEmbed()
 		.setColor(successColor)
 		.setTitle("✅ Success!")
 		.setDescription(content);
-	interaction.reply({ embeds: [ successEmbed ]});
+	interaction.reply({ embeds: [ successEmbed ], ephemeral: ephemeral });
 }
 
 /*
@@ -192,29 +193,32 @@ async function promptSuccessEmbedOnSlash(interaction, content) {
   SEND a response in embed upon failed result
 
 */
-async function promptFailureEmbedOnSlash(interaction, content) {
+async function promptFailureEmbedOnSlash(interaction, content, ephemeral) {
+	ephemeral ? null : ephemeral == false;
 	const failColor = "#ff4d00";
 	const failureEmbed = new MessageEmbed()
 		.setColor(failColor)
 		.setTitle("❌ Woops, something went wrong.")
 		.setDescription(content);
-	interaction.reply({ embeds: [ failureEmbed ]});
+	interaction.reply({ embeds: [ failureEmbed ], ephemeral: ephemeral});
 }
 
-// 
+//
 /*
   PROMPT ALERT EMBED
 
   SEND a response in embed upon invalid parameters
 
 */
-async function promptAlertEmbedOnSlash(interaction, content) {
+async function promptAlertEmbedOnSlash(interaction, content, ephemeral) {
+	ephemeral ? null : ephemeral == false;
+	ephemeral ? ephemeral == false : null;
 	const alertColor = "#FFA700";
 	const alertEmbed = new MessageEmbed()
 		.setColor(alertColor)
 		.setTitle("⚠️ Yikes, invalid Usage!")
 		.setDescription(content);
-	interaction.reply({ embeds: [ alertEmbed ]});
+	interaction.reply({ embeds: [ alertEmbed ], ephemeral: ephemeral});
 }
 
 /*
@@ -242,8 +246,8 @@ async function awaitReply(msg, question, limit = 60000) {
 
 
 /* MISCELLANEOUS NON-CRITICAL FUNCTIONS */
-  
-// toProperCase(String) returns a proper-cased string such as: 
+
+// toProperCase(String) returns a proper-cased string such as:
 // toProperCase("Mary had a little lamb") returns "Mary Had A Little Lamb"
 function toProperCase(string) {
 	return string.replace(/([^\W_]+[^\s-]*) */g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
@@ -254,7 +258,7 @@ process.on("uncaughtException", (err) => {
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
 	logger.error(`Uncaught Exception: ${errorMsg}`);
 	console.error(err);
-	// Always best practice to let the code crash on uncaught exceptions. 
+	// Always best practice to let the code crash on uncaught exceptions.
 	// Because you should be catching them anyway.
 	process.exit(1);
 });
@@ -264,20 +268,20 @@ process.on("unhandledRejection", err => {
 	console.error(err);
 });
 
-module.exports = { 
-	getGuildDB, 
-	getUser, 
-	getChannel, 
+module.exports = {
+	getGuildDB,
+	getUser,
+	getChannel,
 	getRole,
 	getEmoji,
-	defaultDB, 
-	promptSuccessEmbed, 
-	promptFailureEmbed, 
-	promptAlertEmbed, 
+	defaultDB,
+	promptSuccessEmbed,
+	promptFailureEmbed,
+	promptAlertEmbed,
 	promptSuccessEmbedOnSlash,
 	promptFailureEmbedOnSlash,
 	promptAlertEmbedOnSlash,
-	permlevel, 
-	awaitReply, 
+	permlevel,
+	awaitReply,
 	toProperCase
 };

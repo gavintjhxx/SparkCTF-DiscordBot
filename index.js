@@ -39,6 +39,10 @@ client.container = {
 	levelCache
 };
 
+client.db = {
+	guildSettings: require("./models/guildSettings")
+};
+
 // We're doing real fancy node 8 async/await stuff here, and to do that
 // we need to wrap stuff in an anonymous function. It's annoying but it works.
 
@@ -62,7 +66,7 @@ const init = async () => {
 		const command = require(`./slash/${file}`);
 		const commandName = file.split(".")[0];
 		logger.log(`Loading Slash command: ${commandName}. 👌`, "log");
-        
+
 		// Now set the name of the command with it's properties.
 		client.container.slashcmds.set(command.commandData.name, command);
 	}
@@ -74,7 +78,7 @@ const init = async () => {
 		logger.log(`Loading Event: ${eventName}. 👌`, "log");
 		const event = require(`./events/${file}`);
 		// Bind the client to any event, before the existing arguments
-		// provided by the discord.js event. 
+		// provided by the discord.js event.
 		// This line is awesome by the way. Just sayin'.
 		client.on(eventName, event.bind(null, client));
 	}

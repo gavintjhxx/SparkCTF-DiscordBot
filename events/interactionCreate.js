@@ -1,17 +1,15 @@
-const logger = require("../modules/Logger.js");
-const { permlevel } = require("../modules/functions.js");
-const config = require("../config.js");
+const { permlevel } = require("../modules/functions");
 
-module.exports = async (client, interaction) => {
+module.exports = async (client, redisClient, interaction) => {
 	// If it's not a command, stop.
 	if (!interaction.isCommand()) return;
 
 	// Get the user or member's permission level from the elevation
-	const level = permlevel(interaction);
-  
+	const level = await permlevel(redisClient, interaction);
+
 	// Grab the command data from the client.container.slashcmds Collection
 	const cmd = client.container.slashcmds.get(interaction.commandName);
-  
+
 	// If that command doesn't exist, silently exit and do nothing
 	if (!cmd) return;
 
@@ -23,7 +21,7 @@ module.exports = async (client, interaction) => {
 		return await interaction.reply({
 			content: `This command can only be used by ${cmd.conf.permLevel}'s only`,
 			// This will basically set the ephemeral response to either announce
-			// to everyone, or just the command executioner. But we **HAVE** to 
+			// to everyone, or just the command executioner. But we **HAVE** to
 			// respond.
 			ephemeral: true
 		});
@@ -31,19 +29,17 @@ module.exports = async (client, interaction) => {
 
 	// If everything checks out, run the command
 	try {
-		await cmd.run(client, interaction);
-		logger.log(`${config.permLevels.find(l => l.level === level).name} ${interaction.user.id} ran slash command ${interaction.commandName}`, "cmd");
-
+		await cmd.run(client, redisClient, interaction);
 	} catch (e) {
 		console.error(e);
-		if (interaction.replied) 
+		if (interaction.replied)
 			interaction.followUp({ content: `There was a problem with your request.\n\`\`\`${e.message}\`\`\``, ephemeral: true })
 				.catch(e => console.error("An error occurred following up on an error", e));
-		else 
+		else
 		if (interaction.deferred)
 			interaction.editReply({ content: `There was a problem with your request.\n\`\`\`${e.message}\`\`\``, ephemeral: true })
 				.catch(e => console.error("An error occurred following up on an error", e));
-		else 
+		else
 			interaction.reply({ content: `There was a problem with your request.\n\`\`\`${e.message}\`\`\``, ephemeral: true })
 				.catch(e => console.error("An error occurred replying on an error", e));
 	}
