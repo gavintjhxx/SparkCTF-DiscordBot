@@ -3,7 +3,7 @@ const { promptFailureEmbed, promptSuccessEmbed } = require("../modules/functions
 
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
 	await promptSuccessEmbed(message, "***Restarting...***");
-	exec("sudo systemctl restart zlotherino.service", async (error) => {
+	exec("sudo systemctl restart CUSTOM_SparkCTF.service", async (error) => {
 		if (error) return promptFailureEmbed(message, "```js\n" + error + "```");
 	});
 };
