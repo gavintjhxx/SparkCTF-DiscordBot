@@ -14,10 +14,11 @@ exports.run = async (client, interaction) => { // eslint-disable-line no-unused-
 	const ticketChannelID = "1305754768370565151";
 	const memberHasRole = interaction.member.roles.cache.get(verifiedRoleID);
 	if (memberHasRole) {
-		return promptFailureEmbedOnSlash(interaction, `You have already been verified. (If you wish to update your team/user name, open a ticket in <#${ticketChannelID}>.`, false);
+		return promptFailureEmbedOnSlash(interaction, `You have already been verified. (If you wish to update your team/user name, open a ticket in <#${ticketChannelID}>.`, true);
 	} else {
 		try {
-			interaction.member.roles.add(verifiedRoleID);
+			const role = interaction.guild.roles.cache.get(verifiedRoleID);
+			interaction.member.roles.add(role);
 			interaction.member.setNickname(`(${teamName}) ${nickname}`);
 			return promptSuccessEmbedOnSlash(interaction, `You have been verified successfully.\n**Team Name:** ${teamName}\n**Nickname:** ${nickname}`, true);
 		} catch (error) {

@@ -1,11 +1,11 @@
 const { permlevel } = require("../modules/functions");
 
-module.exports = async (client, redisClient, interaction) => {
+module.exports = async (client, interaction) => {
 	// If it's not a command, stop.
 	if (!interaction.isCommand()) return;
 
 	// Get the user or member's permission level from the elevation
-	const level = await permlevel(redisClient, interaction);
+	const level = await permlevel(interaction);
 
 	// Grab the command data from the client.container.slashcmds Collection
 	const cmd = client.container.slashcmds.get(interaction.commandName);
@@ -29,7 +29,7 @@ module.exports = async (client, redisClient, interaction) => {
 
 	// If everything checks out, run the command
 	try {
-		await cmd.run(client, redisClient, interaction);
+		await cmd.run(client, interaction);
 	} catch (e) {
 		console.error(e);
 		if (interaction.replied)
