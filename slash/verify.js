@@ -34,7 +34,7 @@ exports.commandData = {
 	options: [
 		{
 			name: "firstname",
-			description: "Your first name (To facilitate prize distribution, we need to keep track of your real name (as stated on your Microsoft 365 account))",
+			description: "Your first name (To facilitate prize distribution, we need to keep track of your real name)",
 			type: 3,
 			required: true
 		},
