@@ -5,9 +5,9 @@ exports.run = async (client, interaction) => { // eslint-disable-line no-unused-
 	if (interaction.guildId !== process.env.CTF_SERVER_ID) return;
 
 	const params = interaction.options._hoistedOptions;
-	const nickname = params[0]?.value;
+	const firstname = params[0]?.value;
 	const teamName = params[1]?.value;
-	if (!nickname || !teamName) return promptFailureEmbedOnSlash(interaction, "Something went wrong.", true);
+	if (!firstname || !teamName) return promptFailureEmbedOnSlash(interaction, "Something went wrong.", true);
 	if (teamName.length > 30) return promptFailureEmbedOnSlash(interaction, "Team name is too long. (Maximum 30 characters)", true);
 
 	const verifiedRoleID = "1305735928517623839";
@@ -19,8 +19,8 @@ exports.run = async (client, interaction) => { // eslint-disable-line no-unused-
 		try {
 			const role = interaction.guild.roles.cache.get(verifiedRoleID);
 			interaction.member.roles.add(role);
-			interaction.member.setNickname(`(${teamName}) ${nickname}`);
-			return promptSuccessEmbedOnSlash(interaction, `You have been verified successfully.\n**Team Name:** ${teamName}\n**Nickname:** ${nickname}`, true);
+			interaction.member.setNickname(`(${teamName}) ${firstname}`);
+			return promptSuccessEmbedOnSlash(interaction, `You have been verified successfully.\n**Team Name:** ${teamName}\n**Name:** ${firstname}`, true);
 		} catch (error) {
 			return promptFailureEmbedOnSlash(interaction, `Something went wrong. Please open a ticket in <#${ticketChannelID}>`, true);
 		}
@@ -30,11 +30,11 @@ exports.run = async (client, interaction) => { // eslint-disable-line no-unused-
 
 exports.commandData = {
 	name: "verify",
-	description: "Verify your nickname and team name.",
+	description: "Verify your first name and team name.",
 	options: [
 		{
-			name: "nickname",
-			description: "This nickname will be applied to your server profile",
+			name: "firstname",
+			description: "Your first name (To facilitate prize distribution, we need to keep track of your real name (as stated on your Microsoft 365 account))",
 			type: 3,
 			required: true
 		},
